@@ -10,13 +10,21 @@ module.exports = {
         rules: [{
             test: /\.js$/,
             exclude: /node_modules/,
-            loader: "babel-loader"
+            loader: "babel-loader",
+            query: {
+                presets: ['es2015']
+            }
         }]
     },
     plugins: [
         new webpack.ProvidePlugin({
             jQuery: 'jquery',
             $: "jquery"
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
         })
     ]
 

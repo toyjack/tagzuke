@@ -8,7 +8,6 @@ import './lib/jquery.selection';
 window.jQuery = jQuery;
 window.$ = $;
 
-let selectedRow = ""
 $(document).ready(function () {
     if (isAPIAvailable()) {
         $('#files').bind('change', handleFileSelect);
@@ -18,9 +17,9 @@ $(document).ready(function () {
         $('#textarea').val($('#table').bootstrapTable('getSelections')[0].KR_def)
     });
     $('#save').click(function () {
+        let selectedRow = ""
         selectedRow = $('input[name="btSelectItem"]:checked').data('index')
         var newValue = $('#textarea').val()
-        console.log(selectedRow, newValue)
         $('#table').bootstrapTable('updateCell', {
             index: selectedRow,
             field: 'KR_def',
