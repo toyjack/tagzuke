@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <title>Tag Zuke!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules\bootstrap-table\dist\bootstrap-table.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Tag Zuke!</h2>
+        <h4>Version:プロトタイプのプロトタイプ <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>LIU Guanwei</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputFile">File input</label>
+                    <input type="file" id="files">
+                    <p class="help-block">Example block-level help text here.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <output id="list">
+                </output>
+            </div>
+        </div>
+        <div id="toolbar"></div>
+        <table class="table" id="table"></table>
+        <form action="#">
+            <input id="fix" class="btn btn-default" type="button" value="修正">
+            <input type="button" class="btn btn-default" id="save" value="保存">
+            <input type="button" class="btn btn-default" id="export" value="書き出し">
+            <div class="form-group">
+                <textarea class="form-control" id="textarea"></textarea>
+            </div>
+            <div class="btn-group" role="group" aria-label="...">
+                <input class="btn btn-warning" type="button" value="和訓" id="wakun">
+                <input class="btn btn-danger" type="button" value="字音" id="jion">
+                <input class="btn btn-success" type="button" value="字体" id="jitai">
+                <input class="btn btn-info" type="button" value="漢文" id="kanbun">
+            </div>
+        </form>
+    </div>
+    <script src="bundle.js">
+    </script>
+</body>
+
+</html>
