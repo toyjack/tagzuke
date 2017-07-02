@@ -1,0 +1,26 @@
+{
+  "name": "tagzuke",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bootstrap-table": "^1.11.2",
+    "jquery": "^3.2.1",
+    "jquery-csv": "^0.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toyjack/tagzuke.git"
+  },
+  "author": "LIU Guanwei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/toyjack/tagzuke/issues"
+  },
+  "homepage": "https://github.com/toyjack/tagzuke#readme"
+}
