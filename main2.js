@@ -9,12 +9,17 @@ import json2csv from 'json2csv';
 window.jQuery = jQuery;
 window.$ = $;
 
-let mainData="";
+let mainData = "";
+const $table = $('#table');
 
-$(document).ready(function (){
+$(document).ready(function () {
     if (isAPIAvailable()) {
         $('#files').bind('change', handleFileSelect);
     }
+    //test
+    $table.on('click-cell.bs.table',function (field, value, row, $element){
+        console.log(field, value, row, $element)
+    })
 })
 
 
@@ -52,20 +57,25 @@ function handleFileSelect(evt) {
     output += ' - LastModified: ' + (file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a') +
         '<br />\n';
     // read the file contents
-    printTable(file);
-    // post the results
-    $('#list').append(output);
-}
-
-function printTable(file) {
     let reader = new FileReader();
     reader.readAsText(file);
     reader.onload = function (event) {
         let csv = event.target.result;
         let obCSV = $.csv.toObjects(csv);
         let jsonobject = JSON.stringify(obCSV);
-        mainData= jsonobject;
-        $('#table').bootstrapTable({
+        mainData = jsonobject;
+        printTable(obCSV);
+    };
+
+    reader.onerror = function () {
+        alert('Unable to read ' + file.fileName);
+    };
+    // post the results
+    $('#list').append(output);
+}
+
+function printTable(obCSV) {
+    $('#table').bootstrapTable({
             data: obCSV,
             pagination: true,
             showPaginationSwitch: false,
@@ -121,9 +131,9 @@ function printTable(file) {
                 }
             ]
         });
-    };
+}
 
-    reader.onerror = function () {
-        alert('Unable to read ' + file.fileName);
-    };
+function splitTag(cell){
+    let tagArr = cell.split('　');
+    console.log(tagArr)
 }
