@@ -5,8 +5,8 @@
     <title>Tag Zuke!</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
-    <link rel="stylesheet" href="node_modules\bootstrap-table\dist\bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="public/lib/bootstrap.min.css">
+    <link rel="stylesheet" href="public/lib/bootstrap-table.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -15,36 +15,41 @@
         <h2>Tag Zuke!</h2>
         <h4>Version:プロトタイプのプロトタイプ <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>LIU Guanwei</h4>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="exampleInputFile">File input</label>
                     <input type="file" id="files">
                     <p class="help-block">Example block-level help text here.</p>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <output id="list">
                 </output>
+                <input type="button" id="save" class="btn" value="保存ファイル">
+            </div>
+            <div class="col-md-4">
+                <p><input id="current-tag" type="button" class="btn btn-lg btn-block" value=""></p>
+                <p>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <input class="btn btn-warning" type="button" value="和訓" id="wakun">
+                        <input class="btn btn-danger" type="button" value="字音" id="jion">
+                        <input class="btn btn-success" type="button" value="字体" id="jitai">
+                        <input class="btn btn-info" type="button" value="漢文" id="kanbun">
+                        <input class="btn" type="button" value="クリア" id="clear">
+                    </div>
+                </p>
             </div>
         </div>
-        <div id="toolbar"></div>
+        <div id="toolbar">
+            <select class="form-control">
+                <option value="">Export Basic</option>
+                <option value="all">Export All</option>
+                <option value="selected">Export Selected</option>
+            </select>
+        </div>
         <table class="table" id="table"></table>
-        <form action="#">
-            <input id="fix" class="btn btn-default" type="button" value="修正">
-            <input type="button" class="btn btn-default" id="save" value="保存">
-            <input type="button" class="btn btn-default" id="export" value="書き出し">
-            <div class="form-group">
-                <textarea class="form-control" id="textarea"></textarea>
-            </div>
-            <div class="btn-group" role="group" aria-label="...">
-                <input class="btn btn-warning" type="button" value="和訓" id="wakun">
-                <input class="btn btn-danger" type="button" value="字音" id="jion">
-                <input class="btn btn-success" type="button" value="字体" id="jitai">
-                <input class="btn btn-info" type="button" value="漢文" id="kanbun">
-            </div>
-        </form>
     </div>
-    <script src="bundle.js">
+    <script src="public/bundle.js">
     </script>
 </body>
 

@@ -1,10 +1,18 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: './main2.js',
+    entry: {
+        main: __dirname + '/src/main.js'
+    },
     output: {
-        path: __dirname,
-        filename: 'bundle.js'
+        path: __dirname + '/public',
+        filename: 'bundle.js',
+        publicPath: '/public/'
+    },
+    resolve: {
+        alias: {
+            'jquery-ui': 'jquery-ui-dist/jquery-ui.js'
+        }
     },
     module: {
         rules: [{
@@ -14,7 +22,13 @@ module.exports = {
             query: {
                 presets: ['es2015']
             }
-        }]
+        }],
+        loaders: [{ test: /\.css$/, loader: ['style-loader', 'css-loader?modules'] },
+            { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
+            { test: /\.(woff|woff2)$/, loader:"url?prefix=font/&limit=5000" },
+            { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream" },
+            { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=image/svg+xml" }
+        ]
     },
     plugins: [
         new webpack.ProvidePlugin({
