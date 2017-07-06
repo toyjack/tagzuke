@@ -4,9 +4,6 @@ import 'jquery-ui';
 import 'bootstrap/dist/js/bootstrap.js'
 import bootstrapTable from 'bootstrap-table';
 import 'jquery-csv';
-import './lib/jquery.selection.js';
-import json2csv from 'json2csv';
-
 
 //ほかのラブライブに使われたjQueryのため
 window.jQuery = jQuery;
@@ -19,8 +16,6 @@ $(document).ready(function () {
     if (isAPIAvailable()) {
         $('#files').bind('change', handleFileSelect);
     }
-
-
 
     $('#save').click(function () {
         $table.bootstrapTable('togglePagination');
@@ -39,6 +34,18 @@ $(document).ready(function () {
          * Get the actual data, this will contain all the data, in 1 array
          */
         $('#table td').not('.bs-checkbox ').each(function () {　 //radioを除外する
+            //$(this) :  td->span->tag
+            // let __arr=[];
+            if ($(this).children('span').length > 0) {
+                $(this).children('span').each(function (i) {
+                    let childNodes = this.childNodes;
+                    $(this).replaceWith(childNodes);
+                });
+                let str = $(this).html();
+                let reg = /、/g;
+                str = str.replace(reg, '　');
+                $(this).html('"' +str+ '"');
+            }
             data.push($(this).html());
         });
 
@@ -197,7 +204,6 @@ function handleFileSelect(evt) {
     let file = files[0];
     // read the file metadata
     let output = ''
-    output += '<span style="font-weight:bold;">' + escape(file.name) + '</span><br />\n';
     output += ' - FileType: ' + (file.type || 'n/a') + '<br />\n';
     output += ' - FileSize: ' + file.size + ' bytes<br />\n';
     output += ' - LastModified: ' + (file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a') +
