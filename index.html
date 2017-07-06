@@ -13,21 +13,23 @@
 <body>
     <div class="container">
         <h2>Tag Zuke!</h2>
-        <h4>Version:プロトタイプのプロトタイプ <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>LIU Guanwei</h4>
-        <div class="row">
+        <h4><span class="glyphicon glyphicon-info-sign"></span>Version:0.1.0 <span class="glyphicon glyphicon-copyright-mark"
+                aria-hidden="true"></span><a href="mailto:toyjack@gmail.com">LIU Guanwei</a></h4>
+        <div class="row" id="menu-row">
             <div class="col-md-4">
+                <p><b>Step 1</b></p>
+                <p>下にある「ファイルを選択」ボタンをクリック、CSVデータファイルをアップロードしてください。</p>
                 <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
+                    <label for="exampleInputFile">ファイルを開く</label>
                     <input type="file" id="files">
-                    <p class="help-block">Example block-level help text here.</p>
+                    <p class="help-block">CSVファイルをアップロードしてください。</p>
                 </div>
-            </div>
-            <div class="col-md-4">
                 <output id="list">
                 </output>
-                <input type="button" id="save" class="btn" value="保存ファイル">
             </div>
             <div class="col-md-4">
+                <p><b>Step 2</b></p>
+                <p>ファイルの読み込みが終了後、小さいタグボタンをクリックしてタグの種類を選択できます。選択されたタグは大きいボタンで示します。</p>
                 <p><input id="current-tag" type="button" class="btn btn-lg btn-block" value=""></p>
                 <p>
                     <div class="btn-group" role="group" aria-label="...">
@@ -39,13 +41,13 @@
                     </div>
                 </p>
             </div>
+            <div class="col-md-4">
+                <p><b>Step 3</b></p>
+                <p>タグを付けた後、「保存」ボタンをクリックするとタグ付けたCSVファイルをダウンロードできます。ダウンロードしたファイルをもう一度アップロードすると続けて作業できます。</p>
+                <input type="button" id="save" class="btn" value="保存ファイル">
+            </div>
         </div>
         <div id="toolbar">
-            <select class="form-control">
-                <option value="">Export Basic</option>
-                <option value="all">Export All</option>
-                <option value="selected">Export Selected</option>
-            </select>
         </div>
         <table class="table" id="table"></table>
     </div>
