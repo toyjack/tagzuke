@@ -17,6 +17,10 @@ $(document).ready(function () {
         $('#files').bind('change', handleFileSelect);
     }
 
+    $('#pageJump').click(function(){
+        console.log($('#pageNumber').val())
+        jumpToPage($('#pageNumber').val())
+    })
     $('#save').click(function () {
         $table.bootstrapTable('togglePagination');
         let titles = [];
@@ -234,13 +238,18 @@ function tagDef(text, tag) {
     return `<${tag}>${clearedText}</${tag}>`;
 }
 
+function jumpToPage(page){
+    page= Number(page) ? Number(page):1;
+    $table.bootstrapTable('selectPage', page);
+}
+
 function printTable(obCSV) {
     $('#table').bootstrapTable({
         data: obCSV,
         pagination: true,
         showPaginationSwitch: true,
         search: true,
-        searchAlign: 'left',
+        searchAlign: 'right',
         searchOnEnterKey: true,
         showToggle: false,
         showColumns: true,
