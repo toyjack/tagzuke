@@ -17,7 +17,7 @@ $(document).ready(function () {
         $('#files').bind('change', handleFileSelect);
     }
 
-    $('#pageJump').click(function(){
+    $('#pageJump').click(function () {
         console.log($('#pageNumber').val())
         jumpToPage($('#pageNumber').val())
     })
@@ -30,14 +30,14 @@ $(document).ready(function () {
          * Get the table headers, this will be CSV headers
          * The count of headers will be CSV string separator
          */
-        $('#table th').not('.bs-checkbox ').each(function () { //radioを除外する
+        $('#table th').not(':contains("Status")').each(function () { //radioを除外する
             titles.push($(this).text());
         });
 
         /*
          * Get the actual data, this will contain all the data, in 1 array
          */
-        $('#table td').not('.bs-checkbox ').each(function () {　 //radioを除外する
+        $('#table td').not(':contains("完成")').each(function () {　 //radioを除外する
             //$(this) :  td->span->tag
             // let __arr=[];
             if ($(this).children('span').length > 0) {
@@ -48,7 +48,7 @@ $(document).ready(function () {
                 let str = $(this).html();
                 let reg = /、/g;
                 str = str.replace(reg, '　');
-                $(this).html('"' +str+ '"');
+                $(this).html('"' + str + '"');
             }
             data.push($(this).html());
         });
@@ -238,8 +238,8 @@ function tagDef(text, tag) {
     return `<${tag}>${clearedText}</${tag}>`;
 }
 
-function jumpToPage(page){
-    page= Number(page) ? Number(page):1;
+function jumpToPage(page) {
+    page = Number(page) ? Number(page) : 1;
     $table.bootstrapTable('selectPage', page);
 }
 
@@ -256,6 +256,12 @@ function printTable(obCSV) {
         toolbar: '#toolbar',
         striped: true,
         columns: [{
+                field: "Status",
+                title: "Status",
+                formatter: function (value, row, index) {
+                    return checkStatus(value, row, index)
+                }
+            }, {
                 field: 'KRID',
                 title: 'KRID',
             },
@@ -297,6 +303,15 @@ function printTable(obCSV) {
             }
         ]
     });
+}
+
+function checkStatus(value, row, index){
+    let tempDef= row.KR_def;
+    if (tempDef.indexOf('<') > -1){
+            return `<span class="glyphicon glyphicon-ok">完成</span>`;
+    }else{ 
+        return `<span class="glyphicon glyphicon-remove">未完成</span>`;
+    }
 }
 
 function splitTag(value) {

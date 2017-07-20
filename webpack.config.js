@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
     entry: {
@@ -8,6 +9,11 @@ module.exports = {
         path: __dirname + '/public',
         filename: 'bundle.js',
         publicPath: '/public/'
+    },
+    devServer:{
+        contentBase: "./",
+        compress: true,
+        port: 8090
     },
     resolve: {
         alias: {
