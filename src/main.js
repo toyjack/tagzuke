@@ -4,6 +4,7 @@ import 'jquery-ui';
 import 'bootstrap/dist/js/bootstrap.js'
 import bootstrapTable from 'bootstrap-table';
 import 'jquery-csv';
+import './lib/mindmup-editabletable.js'
 
 //ほかのラブライブに使われたjQueryのため
 window.jQuery = jQuery;
@@ -300,16 +301,27 @@ function printTable(obCSV) {
                     return splitTag(value)
                 },
                 events: actionEvents
+            },
+            {
+                field: 'Mark',
+                title: 'Mark',
+                editable: {
+                    type: 'text',
+                    mode: 'inline'
+                }
             }
-        ]
+        ],
+        onPostBody: function(){
+            $('#table').editableTableWidget({editor: $('<textarea>')});
+        }
     });
 }
 
-function checkStatus(value, row, index){
-    let tempDef= row.KR_def;
-    if (tempDef.indexOf('<') > -1){
-            return `<span class="glyphicon glyphicon-ok">完成</span>`;
-    }else{ 
+function checkStatus(value, row, index) {
+    let tempDef = row.KR_def;
+    if (tempDef.indexOf('<') > -1) {
+        return `<span class="glyphicon glyphicon-ok">完成</span>`;
+    } else {
         return `<span class="glyphicon glyphicon-remove">未完成</span>`;
     }
 }

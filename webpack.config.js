@@ -17,6 +17,7 @@ module.exports = {
     },
     resolve: {
         alias: {
+            'jquery': require.resolve('jquery'),
             'jquery-ui': 'jquery-ui-dist/jquery-ui.js'
         }
     },
@@ -41,11 +42,11 @@ module.exports = {
             jQuery: 'jquery',
             $: "jquery"
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        })
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false
+        //     }
+        // })
     ]
 
 };
