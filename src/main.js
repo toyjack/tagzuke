@@ -108,7 +108,8 @@ $(document).ready(function () {
         tag = 'clear'
         changeCurrentTagButton(tag)
     });
-    $('fix').click(function (){
+    $('#fix').click(function (){
+        tag= 'fix'
         changeCurrentTagButton('fix');
     })
 
@@ -179,7 +180,7 @@ function changeCurrentTagButton(tag) {
             curBtn.attr('class', 'btn btn-lg btn-block').val('クリア')
             break;
         case 'fix':
-            curBtn.attr('class', 'btn btn-lg btn-default').val('修正')
+            curBtn.attr('class', 'btn btn-lg btn-block btn-default').val('修正')
             break;
         default:
             break;
@@ -366,13 +367,27 @@ window.actionEvents = {
         let element = $(this)
         let def = element.html() //よくわからないけど、つかえる。。。。
         let defs = row.KR_def
-        defs = defs.replace(def, tagDef(def, tag))
-        $('#table').bootstrapTable('updateCell', {
-            index: index,
-            field: 'KR_def',
-            value: defs
-        })
-        console.log(def, defs)
+        if(tag!='fix'){
+            defs = defs.replace(def, tagDef(def, tag))
+            $('#table').bootstrapTable('updateCell', {
+                index: index,
+                field: 'KR_def',
+                value: defs
+            })
+        }
+        if(tag==='fix'){
+            $('#def-modal').modal('show')
+            $('#def-tofix').val(defs)
+            $('#save-modal').click(function(){
+                let fixedDef=$('#def-tofix').val();
+                $('#table').bootstrapTable('updateCell', {
+                index: index,
+                field: 'KR_def',
+                value: fixedDef
+            })
+            })
+        }
+        
         // element.replaceWith(tagDef($(this).text(), tag))
         // console.log(row)
     }
