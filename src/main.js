@@ -375,6 +375,18 @@ window.actionEvents = {
                 value: defs
             })
         }
+        if(tag==='fix'){
+            $('#def-modal').modal('show')
+            $('#def-tofix').val(defs)
+            $('#save-modal').click(function(){
+                let fixedDef=$('#def-tofix').val();
+                $('#table').bootstrapTable('updateCell', {
+                index: index,
+                field: 'KR_def',
+                value: fixedDef
+            })
+            })
+        }
         
         // element.replaceWith(tagDef($(this).text(), tag))
         // console.log(row)

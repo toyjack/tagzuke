@@ -15,43 +15,43 @@
     <div class="container">
         <nav class="navbar navbar-default navbar-fixed-top">
             <h2>Tag Zuke!</h2>
-        <h4><span class="glyphicon glyphicon-info-sign"></span>Version:0.1.1 <span class="glyphicon glyphicon-copyright-mark"
-                aria-hidden="true"></span><a href="mailto:toyjack@gmail.com">LIU Guanwei</a></h4>
-        <div class="row" id="menu-row">
-            <div class="col-md-4">
-                <p><b>Step 1</b></p>
-                <p>下にある「ファイルを選択」ボタンをクリック、CSVデータファイルをアップロードしてください。</p>
-                <div class="form-group">
-                    <label for="exampleInputFile">ファイルを開く</label>
-                    <input type="file" id="files">
-                    <p class="help-block">CSVファイルをアップロードしてください。</p>
-                </div>
-                <output id="list">
-                </output>
-            </div>
-            <div class="col-md-4">
-                <p><b>Step 2</b></p>
-                <p>ファイルの読み込みが終了後、小さいタグボタンをクリックしてタグの種類を選択できます。選択されたタグは大きいボタンで示します。タグボタンが選択された上で、注文をクリックすればタグを付けることができます。</p>
-                <p><input id="current-tag" type="button" class="btn btn-lg btn-block" value=""></p>
-                <p>
-                    <div class="btn-group" role="group" aria-label="...">
-                        <input class="btn btn-warning" type="button" value="和訓" id="wakun">
-                        <input class="btn btn-danger" type="button" value="字音" id="jion">
-                        <input class="btn btn-success" type="button" value="字体" id="jitai">
-                        <input class="btn btn-info" type="button" value="漢文" id="kanbun">
-                        <input class="btn" type="button" value="クリア" id="clear">
-                        <input class="btn btn-default" type="button" value="修正" id="fix">
+            <h4><span class="glyphicon glyphicon-info-sign"></span>Version:0.2.0 <span class="glyphicon glyphicon-copyright-mark"
+                    aria-hidden="true"></span><a href="mailto:toyjack@gmail.com">LIU Guanwei</a></h4>
+            <div class="row" id="menu-row">
+                <div class="col-md-4">
+                    <p><b>Step 1</b></p>
+                    <p>下にある「ファイルを選択」ボタンをクリック、CSVデータファイルをアップロードしてください。</p>
+                    <div class="form-group">
+                        <label for="exampleInputFile">ファイルを開く</label>
+                        <input type="file" id="files">
+                        <p class="help-block">CSVファイルをアップロードしてください。</p>
                     </div>
-                </p>
+                    <output id="list">
+                    </output>
+                </div>
+                <div class="col-md-4">
+                    <p><b>Step 2</b></p>
+                    <p>ファイルの読み込みが終了後、小さいタグボタンをクリックしてタグの種類を選択できます。選択されたタグは大きいボタンで示します。タグボタンが選択された上で、注文をクリックすればタグを付けることができます。</p>
+                    <p><input id="current-tag" type="button" class="btn btn-lg btn-block" value=""></p>
+                    <p>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <input class="btn btn-warning" type="button" value="和訓" id="wakun">
+                            <input class="btn btn-danger" type="button" value="字音" id="jion">
+                            <input class="btn btn-success" type="button" value="字体" id="jitai">
+                            <input class="btn btn-info" type="button" value="漢文" id="kanbun">
+                            <input class="btn" type="button" value="クリア" id="clear">
+                            <input class="btn btn-default" type="button" value="修正" id="fix">
+                        </div>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p><b>Step 3</b></p>
+                    <p>タグを付けた後、「保存」ボタンをクリックするとタグ付けたCSVファイルをダウンロードできます。ダウンロードしたファイルをもう一度アップロードすると続けて作業できます。</p>
+                    <input type="button" id="save" class="btn" value="保存ファイル">
+                </div>
             </div>
-            <div class="col-md-4">
-                <p><b>Step 3</b></p>
-                <p>タグを付けた後、「保存」ボタンをクリックするとタグ付けたCSVファイルをダウンロードできます。ダウンロードしたファイルをもう一度アップロードすると続けて作業できます。</p>
-                <input type="button" id="save" class="btn" value="保存ファイル">
-            </div>
-        </div>
         </nav>
-        
+
         <div id="toolbar">
             <form action="#" class="form-inline">
                 <input type="text" class="form-control" id="pageNumber" placeholder="ページナンバー">
@@ -59,7 +59,32 @@
             </form>
         </div>
         <table class="table" id="table"></table>
-        
+        <div class="modal fade" tabindex="-1" role="dialog" id="def-modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body&hellip;</p>
+                        <div class="form-group">
+                            <lable for="def-tofix">内容：</lable>
+                            <input type="text" id="def-tofix" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="close-modal" type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+                        <button id="save-modal" type="button" class="btn btn-primary">保存</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+
     </div>
     <script src="public/bundle.js">
     </script>
