@@ -13,7 +13,8 @@
 
 <body>
     <div class="container">
-        <h2>Tag Zuke!</h2>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <h2>Tag Zuke!</h2>
         <h4><span class="glyphicon glyphicon-info-sign"></span>Version:0.1.1 <span class="glyphicon glyphicon-copyright-mark"
                 aria-hidden="true"></span><a href="mailto:toyjack@gmail.com">LIU Guanwei</a></h4>
         <div class="row" id="menu-row">
@@ -49,6 +50,8 @@
                 <input type="button" id="save" class="btn" value="保存ファイル">
             </div>
         </div>
+        </nav>
+        
         <div id="toolbar">
             <form action="#" class="form-inline">
                 <input type="text" class="form-control" id="pageNumber" placeholder="ページナンバー">
@@ -56,17 +59,7 @@
             </form>
         </div>
         <table class="table" id="table"></table>
-        <ul id="context-menu" class="dropdown-menu">
-            <li data-item="checkAll">
-                <a>Select All</a>
-            </li>
-            <li data-item="uncheckAll">
-                <a>Select None</a>
-            </li>
-            <li data-item="checkInvert">
-                <a>Invert Selection</a>
-            </li>
-        </ul>
+        
     </div>
     <script src="public/bundle.js">
     </script>
