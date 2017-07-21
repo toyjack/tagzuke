@@ -5,6 +5,7 @@ import 'bootstrap/dist/js/bootstrap.js'
 import bootstrapTable from 'bootstrap-table';
 import 'jquery-csv';
 
+
 //ほかのラブライブに使われたjQueryのため
 window.jQuery = jQuery;
 window.$ = $;
@@ -16,8 +17,7 @@ $(document).ready(function () {
     if (isAPIAvailable()) {
         $('#files').bind('change', handleFileSelect);
     }
-
-    $('#pageJump').click(function(){
+    $('#pageJump').click(function () {
         console.log($('#pageNumber').val())
         jumpToPage($('#pageNumber').val())
     })
@@ -30,14 +30,14 @@ $(document).ready(function () {
          * Get the table headers, this will be CSV headers
          * The count of headers will be CSV string separator
          */
-        $('#table th').not('.bs-checkbox ').each(function () { //radioを除外する
+        $('#table th').not(':contains("Status")').each(function () { //radioを除外する
             titles.push($(this).text());
         });
 
         /*
          * Get the actual data, this will contain all the data, in 1 array
          */
-        $('#table td').not('.bs-checkbox ').each(function () {　 //radioを除外する
+        $('#table td').not(':contains("完成")').each(function () {　 //radioを除外する
             //$(this) :  td->span->tag
             // let __arr=[];
             if ($(this).children('span').length > 0) {
@@ -48,7 +48,7 @@ $(document).ready(function () {
                 let str = $(this).html();
                 let reg = /、/g;
                 str = str.replace(reg, '　');
-                $(this).html('"' +str+ '"');
+                $(this).html('"' + str + '"');
             }
             data.push($(this).html());
         });
@@ -108,6 +108,9 @@ $(document).ready(function () {
         tag = 'clear'
         changeCurrentTagButton(tag)
     });
+    $('fix').click(function (){
+        changeCurrentTagButton('fix');
+    })
 
 });
 
@@ -174,7 +177,10 @@ function changeCurrentTagButton(tag) {
             break;
         case 'clear':
             curBtn.attr('class', 'btn btn-lg btn-block').val('クリア')
-
+            break;
+        case 'fix':
+            curBtn.attr('class', 'btn btn-lg btn-default').val('修正')
+            break;
         default:
             break;
     }
@@ -238,8 +244,8 @@ function tagDef(text, tag) {
     return `<${tag}>${clearedText}</${tag}>`;
 }
 
-function jumpToPage(page){
-    page= Number(page) ? Number(page):1;
+function jumpToPage(page) {
+    page = Number(page) ? Number(page) : 1;
     $table.bootstrapTable('selectPage', page);
 }
 
@@ -256,6 +262,12 @@ function printTable(obCSV) {
         toolbar: '#toolbar',
         striped: true,
         columns: [{
+                field: "Status",
+                title: "Status",
+                formatter: function (value, row, index) {
+                    return checkStatus(value, row, index)
+                }
+            }, {
                 field: 'KRID',
                 title: 'KRID',
             },
@@ -294,9 +306,47 @@ function printTable(obCSV) {
                     return splitTag(value)
                 },
                 events: actionEvents
-            }
-        ]
+            },
+            // {
+            //     field: 'Mark',
+            //     title: 'Mark',
+            //     class: 'mark-field',
+            //     editable: {
+            //         type: 'text',
+            //         mode: 'inline'
+            //     }
+            // }
+        ],
+        // contextMenu: '#context-menu',
+        // onContextMenuItem: function (row, $el) {
+        //     if ($el.data("item") == "checkAll") {
+        //         // $table.bootstrapTable('checkAll');
+        //         alert('check all')
+        //     };
+        //     if ($el.data("item") == "uncheckAll") {
+        //         $table.bootstrapTable('uncheckAll');
+        //     };
+        //     if ($el.data("item") == "checkInvert") {
+        //         $table.bootstrapTable('checkInvert');
+        //     };
+        //     alert('context Menu')
+        //     // $info.html(JSON.stringify($table.bootstrapTable('getSelections'), null, 4));
+        // }
+        // onPostBody: function () {
+        //     $('#table.mark-field').editableTableWidget({
+        //         editor: $('<textarea>')
+        //     });
+        // }
     });
+}
+
+function checkStatus(value, row, index) {
+    let tempDef = row.KR_def;
+    if (tempDef.indexOf('<') > -1) {
+        return `<span class="glyphicon glyphicon-ok">完成</span>`;
+    } else {
+        return `<span class="glyphicon glyphicon-remove">未完成</span>`;
+    }
 }
 
 function splitTag(value) {

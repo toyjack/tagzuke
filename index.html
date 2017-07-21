@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="public/lib/bootstrap.min.css">
     <link rel="stylesheet" href="public/lib/bootstrap-table.css">
+    <link rel="stylesheet" href="public/lib/jquery.contextMenu.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -38,6 +39,7 @@
                         <input class="btn btn-success" type="button" value="字体" id="jitai">
                         <input class="btn btn-info" type="button" value="漢文" id="kanbun">
                         <input class="btn" type="button" value="クリア" id="clear">
+                        <input class="btn btn-default" type="button" value="修正" id="fix">
                     </div>
                 </p>
             </div>
@@ -49,14 +51,26 @@
         </div>
         <div id="toolbar">
             <form action="#" class="form-inline">
-            <input type="text" class="form-control" id="pageNumber" placeholder="ページナンバー">
-            <input type="button" class="btn btn-default"  id="pageJump" value="ジャンプ">
+                <input type="text" class="form-control" id="pageNumber" placeholder="ページナンバー">
+                <input type="button" class="btn btn-default" id="pageJump" value="ジャンプ">
             </form>
         </div>
         <table class="table" id="table"></table>
+        <ul id="context-menu" class="dropdown-menu">
+            <li data-item="checkAll">
+                <a>Select All</a>
+            </li>
+            <li data-item="uncheckAll">
+                <a>Select None</a>
+            </li>
+            <li data-item="checkInvert">
+                <a>Invert Selection</a>
+            </li>
+        </ul>
     </div>
     <script src="public/bundle.js">
     </script>
+
 </body>
 
 </html>
