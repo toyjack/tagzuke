@@ -4,7 +4,7 @@ import 'jquery-ui';
 import 'bootstrap/dist/js/bootstrap.js'
 import bootstrapTable from 'bootstrap-table';
 import 'jquery-csv';
-import './lib/mindmup-editabletable.js'
+
 
 //ほかのラブライブに使われたjQueryのため
 window.jQuery = jQuery;
@@ -17,7 +17,6 @@ $(document).ready(function () {
     if (isAPIAvailable()) {
         $('#files').bind('change', handleFileSelect);
     }
-
     $('#pageJump').click(function () {
         console.log($('#pageNumber').val())
         jumpToPage($('#pageNumber').val())
@@ -109,6 +108,9 @@ $(document).ready(function () {
         tag = 'clear'
         changeCurrentTagButton(tag)
     });
+    $('fix').click(function (){
+        changeCurrentTagButton('fix');
+    })
 
 });
 
@@ -175,7 +177,10 @@ function changeCurrentTagButton(tag) {
             break;
         case 'clear':
             curBtn.attr('class', 'btn btn-lg btn-block').val('クリア')
-
+            break;
+        case 'fix':
+            curBtn.attr('class', 'btn btn-lg btn-default').val('修正')
+            break;
         default:
             break;
     }
@@ -302,18 +307,36 @@ function printTable(obCSV) {
                 },
                 events: actionEvents
             },
-            {
-                field: 'Mark',
-                title: 'Mark',
-                editable: {
-                    type: 'text',
-                    mode: 'inline'
-                }
-            }
+            // {
+            //     field: 'Mark',
+            //     title: 'Mark',
+            //     class: 'mark-field',
+            //     editable: {
+            //         type: 'text',
+            //         mode: 'inline'
+            //     }
+            // }
         ],
-        onPostBody: function(){
-            $('#table').editableTableWidget({editor: $('<textarea>')});
-        }
+        // contextMenu: '#context-menu',
+        // onContextMenuItem: function (row, $el) {
+        //     if ($el.data("item") == "checkAll") {
+        //         // $table.bootstrapTable('checkAll');
+        //         alert('check all')
+        //     };
+        //     if ($el.data("item") == "uncheckAll") {
+        //         $table.bootstrapTable('uncheckAll');
+        //     };
+        //     if ($el.data("item") == "checkInvert") {
+        //         $table.bootstrapTable('checkInvert');
+        //     };
+        //     alert('context Menu')
+        //     // $info.html(JSON.stringify($table.bootstrapTable('getSelections'), null, 4));
+        // }
+        // onPostBody: function () {
+        //     $('#table.mark-field').editableTableWidget({
+        //         editor: $('<textarea>')
+        //     });
+        // }
     });
 }
 
