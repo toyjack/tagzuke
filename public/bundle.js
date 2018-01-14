@@ -10565,6 +10565,7 @@ function handleFileSelect(evt) {
         var csv = event.target.result;
         var obCSV = _jquery2.default.csv.toObjects(csv);
         //let jsonobject = JSON.stringify(obCSV);
+        console.log(Object.keys(obCSV[0]));
         printTable(obCSV);
     };
 
@@ -10688,7 +10689,7 @@ window.actionEvents = {
         var element = (0, _jquery2.default)(this);
         var def = element.html(); //よくわからないけど、つかえる。。。。
         var defs = row.KR_def;
-        if (tag != 'fix') {
+        if (tag != 'fix' && tag != "") {
             defs = defs.replace(def, tagDef(def, tag));
             (0, _jquery2.default)('#table').bootstrapTable('updateCell', {
                 index: index,
