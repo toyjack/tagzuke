@@ -226,6 +226,7 @@ function handleFileSelect(evt) {
         let csv = event.target.result;
         let obCSV = $.csv.toObjects(csv);
         //let jsonobject = JSON.stringify(obCSV);
+        console.log(Object.keys(obCSV[0]))
         printTable(obCSV);
     };
 
@@ -367,7 +368,7 @@ window.actionEvents = {
         let element = $(this)
         let def = element.html() //よくわからないけど、つかえる。。。。
         let defs = row.KR_def
-        if(tag!='fix'){
+        if(tag!='fix' && tag!=""){
             defs = defs.replace(def, tagDef(def, tag))
             $('#table').bootstrapTable('updateCell', {
                 index: index,
