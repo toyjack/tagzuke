@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer fixed app>
+  <v-navigation-drawer fixed app v-model="ifShowNavBar">
       <v-toolbar flat>
         <v-list>
           <v-list-tile>
@@ -24,27 +24,42 @@
 </template>
 <script>
 export default {
+  props: ["ifShow"],
+  computed: {
+    ifShowNavBar: {
+      get: function() {
+        return this.$store.state.ifShowNavBar;
+      },
+      set: function() {
+        //
+      }
+    }
+  },
   data() {
     return {
       items: [
         {
-            title: "Home",
-            icon: "dashboard",
-            path: '/'
+          title: "Home",
+          icon: "dashboard",
+          path: "/"
         },
-        { title: "Settings", icon: "settings",
-        path:'/settings' },
         {
-            title: 'About',
-            icon: 'info',
-            path: '/about'
+          title: "Settings",
+          icon: "settings",
+          path: "/settings"
+        },
+        {
+          title: "About",
+          icon: "info",
+          path: "/about"
         }
       ]
     };
   },
-  mounted () {
-      console.log(this.$route.name)
+  mounted() {
+    if (this.$store.state.ifShowNavBar) {
+      this.$store.commit("toggleNavBar");
+    }
   }
 };
 </script>
-

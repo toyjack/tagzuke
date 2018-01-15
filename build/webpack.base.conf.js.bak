@@ -3,9 +3,6 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
-const os = require('os');
-const HappyPack  = require('happypack');
-const happThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -14,7 +11,6 @@ function resolve (dir) {
 
 
 module.exports = {
-  cache: true,
   context: path.resolve(__dirname, '../'),
   entry: {
     app: './src/main.js'
@@ -26,13 +22,6 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
-  plugins:[
-    new HappyPack({
-      id: 'js',
-      loaders: ['babel-loader?cacheDirectory=true'],
-      threadPool: happThreadPool
-    })
-  ],
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
@@ -45,14 +34,12 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderConfig //use happypack in vue-loader.js file
+        options: vueLoaderConfig
       },
       {
         test: /\.js$/,
-        // loader: 'babel-loader?cacheDirectory=true',
-        loader: 'happypack/loader?id=js',
-        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')],
-        exclude: [path.resolve('../../node_modules')] //追加的设置 不编译npm
+        loader: 'babel-loader',
+        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
