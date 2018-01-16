@@ -37,6 +37,7 @@ export default {
   },
   data() {
     return {
+      // ifShowNavBar:this.ifShow,
       items: [
         {
           title: "Home",
@@ -49,6 +50,11 @@ export default {
           path: "/settings"
         },
         {
+          title: 'Display',
+          icon:'picture_in_picture',
+          path: '/display'
+        },
+        {
           title: "About",
           icon: "info",
           path: "/about"
@@ -57,9 +63,12 @@ export default {
     };
   },
   mounted() {
-    if (this.$store.state.ifShowNavBar) {
-      this.$store.commit("toggleNavBar");
-    }
+    // if (this.$store.state.ifShowNavBar) {
+    //   this.$store.commit("toggleNavBar");
+    // }
+  },
+  methods: {
+    
   }
 };
 </script>
