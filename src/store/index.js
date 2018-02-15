@@ -12,7 +12,8 @@ export default new Vuex.Store({
             sheet:"",
             indexID:"",
             indexEntry:"",
-            indexDef:""
+            indexDef:"",
+            separator:"　"
         },
         tags:[],
         tagStyle:{
@@ -49,6 +50,9 @@ export default new Vuex.Store({
         },
         updateIndexDef(state,data){
             state.workbookState["indexDef"]=data
+        },
+        updateSeparator(state,data){
+            state.separator=data
         }
     }
 })

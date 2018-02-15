@@ -7,7 +7,9 @@
             <v-card-title>
               <h2>{{props.item.entry}}</h2>
             </v-card-title>
-            {{props.item.def}}
+            <span v-for="(ele,index) in props.item.def" :key="index" :class="tagStyle[ele.type]" @click="changeType">
+              {{ele.text}}
+            </span>
             <v-divider></v-divider>
           </v-card>
         </v-flex>
@@ -27,7 +29,7 @@
 </template>
 
 <script>
-import XLSX from 'xlsx'
+  import XLSX from 'xlsx'
 
   export default {
     data() {
@@ -36,49 +38,105 @@ import XLSX from 'xlsx'
       };
     },
     mounted: function () {
-      //
+      //render
     },
     computed: {
-      items: function () {
-        return this.$store.state.workData
-
-        // let def = (element[indexDef] || '').split(this.separator);
-
-        //   let parsedDef=[]
-
-        //   for(let i=0;i<def.length;i++){
-        //     let ele=def[i]
-        //     let regex = /(<([^>]+)>)/gi
-        //     let type=ele.match(regex)
-        //     let text=ele.replace(regex,"")
-        //     if(type) {
-        //       tempTags.push(type[0])
-        //       parsedDef.push({
-        //       "type":type[0],
-        //       "text":text
-        //     })
-        //     }else{
-        //       parsedDef.push({
-        //       "type":null,
-        //       "text":text
-        //     })
-        //     }
-            
-        //   }
+      separator: function () {
+        return this.$store.state.separator
       },
-      tagStyle: function(){
+      items: function () {
+        let sheet = this.$store.state.workData
+        let tempTags = []
+        let result = []
+        for (let i = 0; i < sheet.length; i++) {
+          let line = sheet[i]
+          let def = (line.def || '').split(this.separator);
+          let parsedDef = []
+          for (let j = 0; j < def.length; j++) {
+            let ele = def[j]
+            let regex = /(<([^>]+)>)/gi
+            let type = ele.match(regex)
+            let text = ele.replace(regex, "")
+            if (type) {
+              tempTags.push(type[0])
+              parsedDef.push({
+                "type": type[0],
+                "text": text
+              })
+            } else {
+              parsedDef.push({
+                "type": "",
+                "text": text
+              })
+            }
+
+          }
+          let newLine = {
+            id: line.id,
+            entry: line.entry,
+            def: parsedDef
+          }
+          result.push(newLine)
+
+        }
+        //unique array
+        tempTags=Array.from(new Set(tempTags))
+        this.$store.commit('updateTags', tempTags)
+
+        return result
+      },
+      tagStyle: function () {
         return this.$store.state.tagStyle
       },
-      tags: function(){
+      tags: function () {
         return this.$store.state.tags
       }
     },
     methods: {
-      save: function(){
+      save: function () {
         //
-        let app=this
-        let ws=XSLX.utils.json_to_sheet(app.items,{header:[]})
-      }
+        let result=[]
+        for(let i=0;i<this.items.length;i++){
+          let line=this.items[i]
+          let newDef=""
+          if(Array.isArray(line.def)){
+            for(let j=0;j<line.def.length;j++){
+              let ele=line.def[j]
+              let startTag=ele.type
+              let text=ele.text
+              let endTag=ele.type.replace(/</,'</')
+              if(newDef===""){
+                newDef=startTag+text+endTag
+              }else{
+                newDef=newDef+"　"+startTag+text+endTag
+              }
+            }
+            line.def=newDef
+          }
+          result.push({
+            id:line.id,
+            entry:line.entry,
+            def:newDef
+          })
+        }
+
+        let app = this
+        let ws = XLSX.utils.json_to_sheet(result, {
+          header: ["id", "def", "entry"]
+        })
+
+        let wb = {
+          SheetNames: [],
+          Sheets: {}
+        };
+        wb.Props = {
+          Title: "tagzuke!",
+          Author: "Guanwei Liu"
+        };
+        var ws_name = "シート１";
+        XLSX.utils.book_append_sheet(wb, ws, ws_name);
+        XLSX.writeFile(wb, 'out.xlsb');
+      },
     }
   };
 

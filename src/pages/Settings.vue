@@ -158,9 +158,7 @@
           });
         }
 
-        //unique array
-        this.tags=Array.from(new Set(tempTags))
-        console.log(this.tags)
+        
 
         //最初の行を無視
         if (this.skipFirstLine) {
@@ -168,7 +166,7 @@
         }
 
         //データを保存
-        this.$store.commit('updateTags', this.tags)
+        this.$store.commit('updateSeparator',this.separator)
         this.$store.commit('updateWorkData', renderResult)
 
         // console.log(this.$store.state.workData)
