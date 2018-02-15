@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height>
     <v-layout justify-center align-center v-if="!readed">
-      <h2 @click="$refs.fileInput.click()">Open File</h2>
+      <a><h2 @click="$refs.fileInput.click()">ファイルを開く</h2></a>
       <input type="file" style="display:none" @change="onFileChange" ref="fileInput">
       <v-btn icon @click="$refs.fileInput.click()">
         <v-icon>insert_drive_file</v-icon>
@@ -37,7 +37,7 @@ export default {
           type: rABS ? "binary" : "array"
         });
         app.sheetNames = app.wb.SheetNames;
-        app.$store.commit('updateWorkbook', app.wb)
+        app.$store.commit('updateWorkbookData', app.wb)
         app.readed=true;
         app.$router.push('/settings')
         // console.log(app.sheetNames)
