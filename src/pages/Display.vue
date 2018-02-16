@@ -1,19 +1,26 @@
 <template>
   <v-layout row wrap>
     <v-flex xs8>
-      <v-data-iterator content-tag="v-layout" row wrap :items="items">
-        <v-flex slot="item" slot-scope="props" xs12>
-          <v-card>
-            <v-card-title>
-              <h2>{{props.item.entry}}</h2>
-            </v-card-title>
-            <span v-for="(ele,index) in props.item.def" :key="index" :class="tagStyle[ele.type]" @click="changeType">
+
+      <v-flex xs12 row v-for="(item,index1) in items" :key="index1">
+        <v-card>
+          <v-card-title>
+            <h2>{{item.entry}}</h2>
+          </v-card-title>
+          <v-menu offset-y absolute v-for="(ele,index2) in item.def" :key="index2">
+            &nbsp;<span :class="tagStyle[ele.type]" slot="activator">
               {{ele.text}}
             </span>
-            <v-divider></v-divider>
-          </v-card>
-        </v-flex>
-      </v-data-iterator>
+            <v-list>
+              <v-list-tile v-for="tag in tags" :key="tag" @click="edit(index1, index2, tag)">
+                <v-list-tile-title>{{tag}}</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
+          <v-divider></v-divider>
+        </v-card>
+      </v-flex>
+
     </v-flex>
     <v-flex xs4>
       <h2>タグ：</h2>
@@ -22,7 +29,7 @@
         <br>
       </span>
       <v-flex row>
-        <v-btn @click.stop="save">Save</v-btn>
+        <v-btn @click.stop="save">保存</v-btn>
       </v-flex>
     </v-flex>
   </v-layout>
@@ -80,7 +87,7 @@
 
         }
         //unique array
-        tempTags=Array.from(new Set(tempTags))
+        tempTags = Array.from(new Set(tempTags))
         this.$store.commit('updateTags', tempTags)
 
         return result
@@ -93,30 +100,37 @@
       }
     },
     methods: {
+      edit: function (index1, index2, tag) {
+        //
+        
+        this.items[index1].def[index2].type=tag
+        console.log(this.items[index1].def[index2])
+        this.$forceUpdate()
+      },
       save: function () {
         //
-        let result=[]
-        for(let i=0;i<this.items.length;i++){
-          let line=this.items[i]
-          let newDef=""
-          if(Array.isArray(line.def)){
-            for(let j=0;j<line.def.length;j++){
-              let ele=line.def[j]
-              let startTag=ele.type
-              let text=ele.text
-              let endTag=ele.type.replace(/</,'</')
-              if(newDef===""){
-                newDef=startTag+text+endTag
-              }else{
-                newDef=newDef+"　"+startTag+text+endTag
+        let result = []
+        for (let i = 0; i < this.items.length; i++) {
+          let line = this.items[i]
+          let newDef = ""
+          if (Array.isArray(line.def)) {
+            for (let j = 0; j < line.def.length; j++) {
+              let ele = line.def[j]
+              let startTag = ele.type
+              let text = ele.text
+              let endTag = ele.type.replace(/</, '</')
+              if (newDef === "") {
+                newDef = startTag + text + endTag
+              } else {
+                newDef = newDef + "　" + startTag + text + endTag
               }
             }
-            line.def=newDef
+            line.def = newDef
           }
           result.push({
-            id:line.id,
-            entry:line.entry,
-            def:newDef
+            id: line.id,
+            entry: line.entry,
+            def: newDef
           })
         }
 

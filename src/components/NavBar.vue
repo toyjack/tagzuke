@@ -40,22 +40,22 @@ export default {
       // ifShowNavBar:this.ifShow,
       items: [
         {
-          title: "Home",
+          title: "ファイルを開く",
           icon: "dashboard",
           path: "/"
         },
         {
-          title: "Settings",
+          title: "設定",
           icon: "settings",
           path: "/settings"
         },
         {
-          title: 'Display',
+          title: '表示',
           icon:'picture_in_picture',
           path: '/display'
         },
         {
-          title: "About",
+          title: "アバウト",
           icon: "info",
           path: "/about"
         }

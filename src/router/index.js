@@ -13,22 +13,22 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'ファイルを開く',
       component: Home
     },
     {
       path: '/settings',
-      name: 'Settings',
+      name: '設定',
       component: Settings
     },
     {
       path:'/about',
-      name:'About',
+      name:'アバウト',
       component: About
     },
     {
       path:'/display',
-      name:'Dispaly',
+      name:'表示',
       component: Display
     }
   ]
