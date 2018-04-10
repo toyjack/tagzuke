@@ -40,18 +40,13 @@
         </v-layout>
 
         <v-layout row wrap>
-        <v-flex xs4>
-          <v-subheader>注文要素の区切り文字：</v-subheader>
-        </v-flex>
-        <v-flex xs8>
-          <v-text-field
-            name="separator"
-            label="デフォルトは全角スペースです"
-            id="separator"
-            v-model="separator"
-          ></v-text-field>
-        </v-flex>
-      </v-layout>
+          <v-flex xs4>
+            <v-subheader>注文要素の区切り文字：</v-subheader>
+          </v-flex>
+          <v-flex xs8>
+            <v-text-field name="separator" label="デフォルトは全角スペースです" id="separator" v-model="separator"></v-text-field>
+          </v-flex>
+        </v-layout>
 
         <v-layout row wrap>
           <v-flex xs12>
@@ -66,7 +61,7 @@
             </span>
           </v-flex>
         </v-layout>
-        
+
         <v-layout row wrap>
           <v-flex xs4>
             検出したタグ：
@@ -101,8 +96,8 @@
         ifShowSelectField: false,
         canRender: false,
         skipFirstLine: true,
-        separator:"　",
-        tags:[]
+        separator: "　", // defualt is zen-kaku space!
+        tags: []
       };
     },
     computed: {
@@ -114,7 +109,6 @@
         }
 
       },
-      
       sheetNames: function () {
         if (this.workbookData) {
           return this.$store.state.workbookData.SheetNames
@@ -123,15 +117,13 @@
         }
       }
     },
-    watch: {
-    },
+    watch: {},
     mounted() {},
     methods: {
       onSheetChange: function () {
         this.ifShowSelectField = true
-
         const worksheet = this.$store.state.workbookData.Sheets[this.selectedSheetName];
-        this.$store.commit("updateWorkingSheet",this.selectedSheetName)
+        this.$store.commit("updateWorkingSheet", this.selectedSheetName)
         this.sheet = XLSX.utils.sheet_to_json(worksheet, {
           header: 1
         });
@@ -139,26 +131,26 @@
       },
       renderTable: function () {
         const indexID = this.filedNames.indexOf(this.selectedIDFiledName)
-        this.$store.commit("updateIndexID",indexID)
+        this.$store.commit("updateIndexID", indexID)
         const indexEntry = this.filedNames.indexOf(this.selectedEntryFiledName)
-        this.$store.commit("updateIndexEntry",indexEntry)
+        this.$store.commit("updateIndexEntry", indexEntry)
         const indexDef = this.filedNames.indexOf(this.selectedDefFieldName)
-        this.$store.commit("updateIndexDef",indexDef)
+        this.$store.commit("updateIndexDef", indexDef)
         let renderResult = []
-        let tempTags=[]
-        for(let i=0;i<this.sheet.length;i++){
-          let element=this.sheet[i]
+        let tempTags = []
+        for (let i = 0; i < this.sheet.length; i++) {
+          let element = this.sheet[i]
           let id = element[indexID];
           let entry = element[indexEntry];
-          let def=(element[indexDef] || '')
-          renderResult.push({
-            "id": id,
-            "entry": entry,
-            "def": def
-          });
+          let def = (element[indexDef] || '')
+          if (def != "") { //注文は空きじゃないだけを
+            renderResult.push({
+              "id": id,
+              "entry": entry,
+              "def": def
+            });
+          }
         }
-
-        
 
         //最初の行を無視
         if (this.skipFirstLine) {
@@ -166,7 +158,7 @@
         }
 
         //データを保存
-        this.$store.commit('updateSeparator',this.separator)
+        this.$store.commit('updateSeparator', this.separator)
         this.$store.commit('updateWorkData', renderResult)
 
         // console.log(this.$store.state.workData)

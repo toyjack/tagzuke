@@ -1,14 +1,20 @@
 <template>
   <v-layout row wrap>
+    <v-flex xs12>
+      <div class="text-xs-center">
+        <p>For pagination</p>
+      </div>
+    </v-flex>
     <v-flex xs8>
-
       <v-flex xs12 row v-for="(item,index1) in items" :key="index1">
         <v-card>
           <v-card-title>
+            {{index1}}.
             <h2>{{item.entry}}</h2>
           </v-card-title>
           <v-menu offset-y absolute v-for="(ele,index2) in item.def" :key="index2">
-            &nbsp;<span :class="tagStyle[ele.type]" slot="activator">
+            &nbsp;
+            <span :class="tagStyle[ele.type]" slot="activator">
               {{ele.text}}
             </span>
             <v-list>
@@ -41,11 +47,17 @@
   export default {
     data() {
       return {
-        //
+        data: [],
+        pagination:{
+          curPage:"1",
+          rowsPerPage:"25",
+          length:"7"
+        },
+        
       };
     },
     mounted: function () {
-      //render
+      this.data = this.chunkData(this.items, this.itemsPerPage)
     },
     computed: {
       separator: function () {
@@ -102,8 +114,8 @@
     methods: {
       edit: function (index1, index2, tag) {
         //
-        
-        this.items[index1].def[index2].type=tag
+
+        this.items[index1].def[index2].type = tag
         console.log(this.items[index1].def[index2])
         this.$forceUpdate()
       },
@@ -151,6 +163,14 @@
         XLSX.utils.book_append_sheet(wb, ws, ws_name);
         XLSX.writeFile(wb, 'out.xlsb');
       },
+      chunkData: function (myArray, chunk_size) {
+        //https://ourcodeworld.com/articles/read/278/how-to-split-an-array-into-chunks-of-the-same-size-easily-in-javascript
+        var results = [];
+        while (myArray.length) {
+          results.push(myArray.splice(0, chunk_size));
+        }
+        return results;
+      }
     }
   };
 

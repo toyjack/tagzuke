@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer fixed app v-model="ifShowNavBar">
+  <v-navigation-drawer fixed app v-model="ifShow">
       <v-toolbar flat>
         <v-list>
           <v-list-tile>
@@ -25,16 +25,6 @@
 <script>
 export default {
   props: ["ifShow"],
-  computed: {
-    ifShowNavBar: {
-      get: function() {
-        return this.$store.state.ifShowNavBar;
-      },
-      set: function() {
-        //
-      }
-    }
-  },
   data() {
     return {
       // ifShowNavBar:this.ifShow,
@@ -62,13 +52,10 @@ export default {
       ]
     };
   },
-  mounted() {
-    // if (this.$store.state.ifShowNavBar) {
-    //   this.$store.commit("toggleNavBar");
-    // }
-  },
-  methods: {
-    
-  }
+  // watch:{
+  //   ifShow:function(val){
+  //     this.$emit('showNavBar',{showNavBar : val})
+  //   }
+  // }
 };
 </script>
