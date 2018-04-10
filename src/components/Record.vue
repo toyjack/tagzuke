@@ -1,35 +1,62 @@
 <template>
-  <v-dialog v-model="dialog2" max-width="500px">
-    <v-card>
-      <v-card-title>
-        Dialog 2
-      </v-card-title>
-      <v-card-text>
-                <v-text-field name="input-1" box v-model="text"></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color="primary" flat @click.stop="dialog2=false">Save</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
+  <v-layout row>
+    <v-flex xs2>{{item.id}}</v-flex>
+    <v-flex xs2>{{item.entry}}</v-flex>
+    <v-flex xs7>
+      <template v-for="(def,index1) in defs">
+        <span :class="tagStyle[def.type]" :key="index1">
+          {{def.text}}
+        </span>
+        <span v-if="index1<defs.length">,</span>
+      </template>
+    </v-flex>
+    <v-flex xs1>
+      <v-btn @click.stop="editDef">修正</v-btn>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
   export default {
     name: "record",
-    props: ['message'],
+    props: ['item'],
     data: function () {
       return {
-        dialog2:true,
-        text: this.message,
+        defs: [],
       };
     },
-    mounted: function () {
-      console.log(this.message)
+    computed: {
+      separator: function () {
+        return this.$store.state.separator
+      },
+      tagStyle: function () {
+        return this.$store.state.tagStyle
+      },
+    },
+    created: function () {
+      let defs = this.item.def.split(this.separator)
+      for (let j = 0; j < defs.length; j++) {
+        let ele = defs[j]
+        let regex = /(<([^>]+)>)/gi
+        let type = ele.match(regex)
+        let text = ele.replace(regex, "")
+        if (type) {
+          this.defs.push({
+            "type": type[0],
+            "text": text
+          })
+        } else {
+          this.defs.push({
+            "type": "",
+            "text": text
+          })
+        }
+      }
     },
     methods: {
-      //
+      editDef: function () {
+        this.$emit('editDef', '')
+      }
     }
   };
 

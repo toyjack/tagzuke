@@ -33,6 +33,14 @@ export default new Vuex.Store({
         updateWorkData(state, data){
             state.workData = data
         },
+        updateWorkDataWithID(state,data){
+            for(let i=0;i<state.workData.length;i++){
+                if(state.workData[i].id==data.id){
+                    state.workData[i].def=data.def
+                    break
+                }
+            }
+        },
         updateTags(state, data){
             state.tags=data
         },

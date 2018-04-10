@@ -1,177 +1,153 @@
 <template>
   <v-layout row wrap>
-    <v-flex xs12>
-      <div class="text-xs-center">
-        <p>For pagination</p>
-      </div>
-    </v-flex>
-    <v-flex xs8>
-      <v-flex xs12 row v-for="(item,index1) in items" :key="index1">
-        <v-card>
-          <v-card-title>
-            {{index1}}.
-            <h2>{{item.entry}}</h2>
-          </v-card-title>
-          <v-menu offset-y absolute v-for="(ele,index2) in item.def" :key="index2">
-            &nbsp;
-            <span :class="tagStyle[ele.type]" slot="activator">
-              {{ele.text}}
-            </span>
-            <v-list>
-              <v-list-tile v-for="tag in tags" :key="tag" @click="edit(index1, index2, tag)">
-                <v-list-tile-title>{{tag}}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
-          <v-divider></v-divider>
-        </v-card>
-      </v-flex>
+    <v-dialog v-model="showDialog" persistent max-width="290">
+      <v-card>
+        <v-card-title class="headline">注文修正</v-card-title>
+        <v-card-text>
+          <v-text-field name="fixedDef" label="注文を入力してください" multi-line v-model="fixedDef"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" flat @click.native="showDialog = false">キャンセル</v-btn>
+          <v-btn color="green darken-1" flat @click.native="saveChange">保存</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
+    <v-flex xs12>
+      <v-card v-shortkey="{up: ['shift','tab'], down: ['tab'], next:['arrowright'],prev:['arrowleft'],changeNext:['arrowdown'],changePrev:['arrowup']}" @shortkey="theAction">
+        <v-toolbar color="white" absolute dense prominent extended fixed>
+          <v-toolbar-title>
+            {{workData[tagActivedIndex].entry}}：
+          </v-toolbar-title>
+          <template v-for="(def,index1) in parsedDef">
+            <span :class="tagStyle[def.type]" :key="index1">
+              {{def.text}}
+            </span>
+          </template>
+        </v-toolbar>
+      </v-card>
     </v-flex>
-    <v-flex xs4>
-      <h2>タグ：</h2>
-      <span v-for="tag in tags" :key="tag">
-        {{tag}}:{{tagStyle[tag]}}
-        <br>
-      </span>
-      <v-flex row>
-        <v-btn @click.stop="save">保存</v-btn>
-      </v-flex>
+
+    <v-flex xs12>
+      <v-layout row v-for="(item,index) in workData" :key="index">
+        <v-flex xs1>
+          <!--  -->
+        </v-flex>
+        <v-flex xs2>{{item.id}}</v-flex>
+        <v-flex xs2>{{item.entry}}</v-flex>
+        <v-flex xs6>
+          {{item.def}}
+        </v-flex>
+        <v-flex xs1>
+          <v-btn @click.stop="editDef(index, item.id)">修正</v-btn>
+        </v-flex>
+      </v-layout>
     </v-flex>
+
   </v-layout>
 </template>
 
 <script>
-  import XLSX from 'xlsx'
-
+  import Vue from 'vue'
+  Vue.use(require('vue-shortkey'))
   export default {
-    data() {
+    name: 'display',
+    data: function () {
       return {
-        data: [],
-        pagination:{
-          curPage:"1",
-          rowsPerPage:"25",
-          length:"7"
-        },
-        
-      };
+        showDialog: false,
+        fixedDef: '',
+        fixedDefIndex: '',
+        fixedID: '',
+        tagActivedIndex: 0,
+        parsedDef: []
+      }
     },
     mounted: function () {
-      this.data = this.chunkData(this.items, this.itemsPerPage)
+      this.parseDef(this.workData[0].def)
     },
     computed: {
       separator: function () {
         return this.$store.state.separator
       },
-      items: function () {
-        let sheet = this.$store.state.workData
-        let tempTags = []
-        let result = []
-        for (let i = 0; i < sheet.length; i++) {
-          let line = sheet[i]
-          let def = (line.def || '').split(this.separator);
-          let parsedDef = []
-          for (let j = 0; j < def.length; j++) {
-            let ele = def[j]
-            let regex = /(<([^>]+)>)/gi
-            let type = ele.match(regex)
-            let text = ele.replace(regex, "")
-            if (type) {
-              tempTags.push(type[0])
-              parsedDef.push({
-                "type": type[0],
-                "text": text
-              })
-            } else {
-              parsedDef.push({
-                "type": "",
-                "text": text
-              })
-            }
-
-          }
-          let newLine = {
-            id: line.id,
-            entry: line.entry,
-            def: parsedDef
-          }
-          result.push(newLine)
-
-        }
-        //unique array
-        tempTags = Array.from(new Set(tempTags))
-        this.$store.commit('updateTags', tempTags)
-
-        return result
+      workData: function () {
+        return this.$store.state.workData
       },
       tagStyle: function () {
         return this.$store.state.tagStyle
       },
-      tags: function () {
-        return this.$store.state.tags
+    },
+    watch: {
+      tagActivedIndex: function (newIndex, oldIndex) {
+        console.log(newIndex)
+        //TODO: save state with oldIndex -> id
       }
     },
     methods: {
-      edit: function (index1, index2, tag) {
-        //
-
-        this.items[index1].def[index2].type = tag
-        console.log(this.items[index1].def[index2])
-        this.$forceUpdate()
+      editDef: function (index, id) {
+        this.showDialog = true
+        this.fixedDefIndex = index
+        this.fixedID = id
+        this.fixedDef = this.workData[index].def
       },
-      save: function () {
-        //
-        let result = []
-        for (let i = 0; i < this.items.length; i++) {
-          let line = this.items[i]
-          let newDef = ""
-          if (Array.isArray(line.def)) {
-            for (let j = 0; j < line.def.length; j++) {
-              let ele = line.def[j]
-              let startTag = ele.type
-              let text = ele.text
-              let endTag = ele.type.replace(/</, '</')
-              if (newDef === "") {
-                newDef = startTag + text + endTag
-              } else {
-                newDef = newDef + "　" + startTag + text + endTag
-              }
-            }
-            line.def = newDef
-          }
-          result.push({
-            id: line.id,
-            entry: line.entry,
-            def: newDef
-          })
-        }
-
-        let app = this
-        let ws = XLSX.utils.json_to_sheet(result, {
-          header: ["id", "def", "entry"]
+      saveChange: function () {
+        this.showDialog = false
+        // Vue.set(this.$store.state.workData,this.fixedDefIndex,this.fixedDef)
+        this.$store.commit('updateWorkDataWithID', {
+          id: this.fixedID,
+          def: this.fixedDef
         })
-
-        let wb = {
-          SheetNames: [],
-          Sheets: {}
-        };
-        wb.Props = {
-          Title: "tagzuke!",
-          Author: "Guanwei Liu"
-        };
-        var ws_name = "シート１";
-        XLSX.utils.book_append_sheet(wb, ws, ws_name);
-        XLSX.writeFile(wb, 'out.xlsb');
       },
-      chunkData: function (myArray, chunk_size) {
-        //https://ourcodeworld.com/articles/read/278/how-to-split-an-array-into-chunks-of-the-same-size-easily-in-javascript
-        var results = [];
-        while (myArray.length) {
-          results.push(myArray.splice(0, chunk_size));
+      parseDef: function (defs) {
+        this.parsedDef = []
+        defs = defs.split(this.separator)
+        for (let j = 0; j < defs.length; j++) {
+          let ele = defs[j]
+          let regex = /(<([^>]+)>)/gi
+          let type = ele.match(regex)
+          let text = ele.replace(regex, "")
+          if (type) {
+            this.parsedDef.push({
+              "type": type[0],
+              "text": text
+            })
+          } else {
+            this.parsedDef.push({
+              "type": "",
+              "text": text
+            })
+          }
         }
-        return results;
+      },
+      theAction(event) {
+        switch (event.srcKey) {
+          case 'up':
+            console.log("up")
+            if (this.tagActivedIndex > 0) {
+              this.tagActivedIndex -= 1
+            }
+            break
+          case 'down':
+            console.log("down")
+            if (this.tagActivedIndex < (this.workData.length - 1)) {
+              this.tagActivedIndex += 1
+            }
+            break
+          case 'next':
+            console.log("next")
+            break
+          case 'prev':
+            console.log("prev")
+          break
+          case 'changeNext':
+            console.log("change next")
+          break
+          case 'changePrev':
+            console.log("change prev")
+          break
+        }
       }
     }
-  };
+  }
 
 </script>
