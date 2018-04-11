@@ -1,0 +1,172 @@
+<template>
+  <v-layout row wrap>
+    <v-flex xs8>
+      <v-flex xs12 row v-for="(item,index1) in items" :key="index1">
+        <v-card>
+          <v-card-title>
+            {{index1}}.
+            <h2>{{item.entry}}</h2>
+          </v-card-title>
+          <v-menu offset-y absolute v-for="(ele,index2) in item.def" :key="index2">
+            &nbsp;
+            <span :class="tagStyle[ele.type]" slot="activator">
+              {{ele.text}}
+            </span>
+            <v-list>
+              <v-list-tile v-for="tag in tags" :key="tag" @click="edit(index1, index2, tag)">
+                <v-list-tile-title>{{tag}}</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
+          <v-divider></v-divider>
+        </v-card>
+      </v-flex>
+
+    </v-flex>
+    <v-flex xs4>
+      <h2>タグ：</h2>
+      <span v-for="tag in tags" :key="tag">
+        {{tag}}:{{tagStyle[tag]}}
+        <br>
+      </span>
+      <v-flex row>
+        <v-btn @click.stop="save">保存</v-btn>
+      </v-flex>
+    </v-flex>
+  </v-layout>
+</template>
+
+<script>
+  import XLSX from 'xlsx'
+
+  export default {
+    data() {
+      return {
+        data: [],
+        pagination:{
+          curPage:"1",
+          rowsPerPage:"25",
+          length:"7"
+        },
+        
+      };
+    },
+    mounted: function () {
+      this.data = this.chunkData(this.items, this.itemsPerPage)
+    },
+    computed: {
+      separator: function () {
+        return this.$store.state.separator
+      },
+      items: function () {
+        let sheet = this.$store.state.workData
+        let tempTags = []
+        let result = []
+        for (let i = 0; i < sheet.length; i++) {
+          let line = sheet[i]
+          let def = (line.def || '').split(this.separator);
+          let parsedDef = []
+          for (let j = 0; j < def.length; j++) {
+            let ele = def[j]
+            let regex = /(<([^>]+)>)/gi
+            let type = ele.match(regex)
+            let text = ele.replace(regex, "")
+            if (type) {
+              tempTags.push(type[0])
+              parsedDef.push({
+                "type": type[0],
+                "text": text
+              })
+            } else {
+              parsedDef.push({
+                "type": "",
+                "text": text
+              })
+            }
+
+          }
+          let newLine = {
+            id: line.id,
+            entry: line.entry,
+            def: parsedDef
+          }
+          result.push(newLine)
+
+        }
+        //unique array
+        tempTags = Array.from(new Set(tempTags))
+        this.$store.commit('updateTags', tempTags)
+
+        return result
+      },
+      tagStyle: function () {
+        return this.$store.state.tagStyle
+      },
+      tags: function () {
+        return this.$store.state.tags
+      }
+    },
+    methods: {
+      edit: function (index1, index2, tag) {
+        //
+
+        this.items[index1].def[index2].type = tag
+        console.log(this.items[index1].def[index2])
+        this.$forceUpdate()
+      },
+      save: function () {
+        //
+        let result = []
+        for (let i = 0; i < this.items.length; i++) {
+          let line = this.items[i]
+          let newDef = ""
+          if (Array.isArray(line.def)) {
+            for (let j = 0; j < line.def.length; j++) {
+              let ele = line.def[j]
+              let startTag = ele.type
+              let text = ele.text
+              let endTag = ele.type.replace(/</, '</')
+              if (newDef === "") {
+                newDef = startTag + text + endTag
+              } else {
+                newDef = newDef + "　" + startTag + text + endTag
+              }
+            }
+            line.def = newDef
+          }
+          result.push({
+            id: line.id,
+            entry: line.entry,
+            def: newDef
+          })
+        }
+
+        let app = this
+        let ws = XLSX.utils.json_to_sheet(result, {
+          header: ["id", "def", "entry"]
+        })
+
+        let wb = {
+          SheetNames: [],
+          Sheets: {}
+        };
+        wb.Props = {
+          Title: "tagzuke!",
+          Author: "Guanwei Liu"
+        };
+        var ws_name = "シート１";
+        XLSX.utils.book_append_sheet(wb, ws, ws_name);
+        XLSX.writeFile(wb, 'out.xlsb');
+      },
+      chunkData: function (myArray, chunk_size) {
+        //https://ourcodeworld.com/articles/read/278/how-to-split-an-array-into-chunks-of-the-same-size-easily-in-javascript
+        var results = [];
+        while (myArray.length) {
+          results.push(myArray.splice(0, chunk_size));
+        }
+        return results;
+      }
+    }
+  };
+
+</script>
