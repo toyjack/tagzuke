@@ -11,6 +11,7 @@
     "build:dll": "webpack --config ./build/webpack.dll.conf.js"
   },
   "dependencies": {
+    "npm": "^5.8.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuetify": "~1",
