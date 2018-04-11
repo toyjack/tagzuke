@@ -1,5 +1,5 @@
 <template>
-  <v-layout row wrap>
+  <div>
     <v-dialog v-model="showDialog" persistent max-width="290">
       <v-card>
         <v-card-title class="headline">注文修正</v-card-title>
@@ -14,38 +14,63 @@
       </v-card>
     </v-dialog>
 
-    <v-flex xs12>
-      <v-card v-shortkey="{up: ['shift','tab'], down: ['tab'], next:['arrowright'],prev:['arrowleft'],changeNext:['arrowdown'],changePrev:['arrowup']}" @shortkey="theAction">
-        <v-toolbar color="white" absolute dense prominent extended fixed>
-          <v-toolbar-title>
-            {{workData[tagActivedIndex].entry}}：
-          </v-toolbar-title>
-          <template v-for="(def,index1) in parsedDef">
-            <span :class="tagStyle[def.type]" :key="index1">
-              {{def.text}}
-            </span>
-          </template>
-        </v-toolbar>
-      </v-card>
-    </v-flex>
+    <v-layout row>
+      <v-flex xs12 v-if="workData">
+        <v-layout row v-for="(item,index) in workData" :key="index">
+          <v-flex xs1>
+            <!--  -->
+          </v-flex>
+          <v-flex xs2>{{item.id}}</v-flex>
+          <v-flex xs2>{{item.entry}}</v-flex>
+          <v-flex xs6 @click="defActivedIndex=index">
+            {{item.def}}
+          </v-flex>
+          <v-flex xs1>
+            <v-btn @click.stop="editDef(index, item.id)">修正</v-btn>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
 
-    <v-flex xs12>
-      <v-layout row v-for="(item,index) in workData" :key="index">
-        <v-flex xs1>
-          <!--  -->
-        </v-flex>
-        <v-flex xs2>{{item.id}}</v-flex>
-        <v-flex xs2>{{item.entry}}</v-flex>
-        <v-flex xs6>
-          {{item.def}}
-        </v-flex>
-        <v-flex xs1>
-          <v-btn @click.stop="editDef(index, item.id)">修正</v-btn>
+    <v-footer height="auto" fixed>
+      <v-layout row>
+        <v-flex xs12>
+          <v-card flat tile>
+            <v-card-text>
+              <v-layout row>
+                <v-flex xs12 v-if="workData">
+                  <v-card v-shortkey="{up: ['shift','tab'], down: ['tab'], next:['arrowright'],prev:['arrowleft'],changeNext:['arrowdown'],changePrev:['arrowup']}"
+                    @shortkey="theAction">
+                    <v-card-title>
+                      <span class="headline">{{workData[defActivedIndex].entry}}：</span>
+                      <v-chip v-for="(def,index) in parsedDef" :class="tagStyle[def.type]" :outline="tagActived.index!=index" :key="index" label
+                        @click.stop="tagActived.index=index">
+                        {{def.text}}
+                      </v-chip>
+                    </v-card-title>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+              <v-layout>
+                <v-flex xs12>
+                  <v-card>
+                    <v-card-text>
+                      <p class="text-xs-center">
+                        <v-chip label v-for="(color,tag,index) in tagStyle" :key="index" :class="color" :outline="tagChangedTo!=index">
+                          {{tag}}
+                        </v-chip>
+                      </p>
+                    </v-card-text>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-card-text>
+          </v-card>
         </v-flex>
       </v-layout>
-    </v-flex>
 
-  </v-layout>
+    </v-footer>
+  </div>
 </template>
 
 <script>
@@ -59,29 +84,50 @@
         fixedDef: '',
         fixedDefIndex: '',
         fixedID: '',
-        tagActivedIndex: 0,
-        parsedDef: []
+        defActivedIndex: 0,
+        parsedDef: [],
+        tagActived:{
+          index:0,
+          type:''
+        },
+        tagChangedTo:''
       }
     },
     mounted: function () {
-      this.parseDef(this.workData[0].def)
+      if (this.workData) {
+        this.parseDef(this.workData[0].def)
+      }else{
+        // TODO: 提醒route位置
+      }
     },
     computed: {
       separator: function () {
-        return this.$store.state.separator
+        return this.$store.getters.separator
       },
       workData: function () {
-        return this.$store.state.workData
+        return this.$store.getters.workData
       },
       tagStyle: function () {
-        return this.$store.state.tagStyle
+        return this.$store.getters.tagStyle
       },
+      tags:function(){
+        return this.$store.getters.tags
+      }
+
     },
     watch: {
-      tagActivedIndex: function (newIndex, oldIndex) {
-        console.log(newIndex)
-        //TODO: save state with oldIndex -> id
+      defActivedIndex: function (newIndex, oldIndex) {
+        this.parseDef(this.workData[newIndex].def)
+        this.tagActived.index = 0
+        this.renderTagSelection()
+      },
+      'tagActived.index':function(newIndex,oldIndex){
+        this.renderTagSelection()
+      },
+      tagChangedTo:function(newIndex,oldIndex){
+        this.tagActived.type=""
       }
+
     },
     methods: {
       editDef: function (index, id) {
@@ -101,6 +147,7 @@
       parseDef: function (defs) {
         this.parsedDef = []
         defs = defs.split(this.separator)
+        console.log(this.separator)
         for (let j = 0; j < defs.length; j++) {
           let ele = defs[j]
           let regex = /(<([^>]+)>)/gi
@@ -119,32 +166,54 @@
           }
         }
       },
+      renderTagSelection:function(){
+        //TODO: 应该简化一下
+        this.tagActived.type=this.parsedDef[this.tagActived.index].type
+        this.tagChangedTo=this.tags.indexOf(this.tagActived.type)
+      },
+
       theAction(event) {
         switch (event.srcKey) {
           case 'up':
-            console.log("up")
-            if (this.tagActivedIndex > 0) {
-              this.tagActivedIndex -= 1
+            if (this.defActivedIndex > 0) {
+              this.defActivedIndex -= 1
             }
             break
           case 'down':
-            console.log("down")
-            if (this.tagActivedIndex < (this.workData.length - 1)) {
-              this.tagActivedIndex += 1
+            if (this.defActivedIndex < (this.workData.length - 1)) {
+              this.defActivedIndex += 1
             }
             break
           case 'next':
-            console.log("next")
+            if (this.tagActived.index < (this.parsedDef.length - 1)) {
+              this.tagActived.index += 1
+            } else {
+              // 回到第一个元素
+              this.tagActived.index = 0
+            }
             break
           case 'prev':
-            console.log("prev")
-          break
+            if (this.tagActived.index > 0) {
+              this.tagActived.index -= 1
+            } else {
+              // 去到最后一个标签
+              this.tagActived.index = this.parsedDef.length - 1
+            }
+            break
           case 'changeNext':
-            console.log("change next")
-          break
+            if(this.tagChangedTo<(this.tags.length-1)){
+              this.tagChangedTo+=1
+            } else{
+              this.tagChangedTo=0
+            }
+            break
           case 'changePrev':
-            console.log("change prev")
-          break
+            if(this.tagChangedTo>0){
+              this.tagChangedTo-=1
+            }else{
+              this.tagChangedTo=this.tags.length-1
+            }
+            break
         }
       }
     }

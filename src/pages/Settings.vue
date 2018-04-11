@@ -102,19 +102,10 @@
     },
     computed: {
       workbookData: function () {
-        if (this.$store.state.workbookData) {
-          return this.$store.state.workbookData;
-        } else {
-          return false;
-        }
-
+        return this.$store.getters.workbookData
       },
       sheetNames: function () {
-        if (this.workbookData) {
-          return this.$store.state.workbookData.SheetNames
-        } else {
-          return []
-        }
+        return this.$store.getters.sheetNames
       }
     },
     watch: {},
