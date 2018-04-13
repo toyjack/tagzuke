@@ -135,11 +135,32 @@
           let entry = element[indexEntry];
           let def = (element[indexDef] || '')
           if (def != "") { //注文は空きじゃないだけを
+            let parsedDef = []
+            def = def.split(this.separator)
+            console.log(this.separator)
+            for (let j = 0; j < def.length; j++) {
+              let ele = def[j]
+              let regex = /(<([^>]+)>)/gi
+              let type = ele.match(regex)
+              let text = ele.replace(regex, "")
+              if (type) {
+                parsedDef.push({
+                  "type": type[0],
+                  "text": text
+                })
+              } else {
+                parsedDef.push({
+                  "type": "",
+                  "text": text
+                })
+              }
+            }
+
             renderResult.push({
               "id": id,
               "entry": entry,
-              "def": def
-            });
+              "def": parsedDef
+            }); // TODO: 前処理と注文の構造化
           }
         }
 

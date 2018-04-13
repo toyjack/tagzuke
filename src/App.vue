@@ -21,6 +21,9 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+      <v-list dense class="pt-0">
+        
+      </v-list>
     </v-navigation-drawer>
 
     <v-toolbar fixed app>
@@ -58,6 +61,11 @@ export default {
           title: '表示',
           icon:'picture_in_picture',
           path: '/display'
+        },
+        {
+          title: '確認＆保存',
+          icon:'save',
+          path: '/conform'
         },
         {
           title: "アバウト",

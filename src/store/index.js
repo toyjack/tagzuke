@@ -15,7 +15,8 @@ export default new Vuex.Store({
       indexDef: "",
       separator: "　"
     },
-    tags: ["<jion>",
+    tags: [
+      "<jion>",
       "<jitai>",
       "<kanbun>",
       "<wakun>"
@@ -77,6 +78,12 @@ export default new Vuex.Store({
           break
         }
       }
+    },
+    updateDefTag(state,payload){
+      let defIndex=payload.defIndex
+      let tagIndex=payload.tagIndex
+      let newTag=payload.newTag
+      state.workData[defIndex].def[tagIndex].type=newTag
     },
     updateTags(state, data) {
       state.tags = data
