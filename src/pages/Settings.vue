@@ -73,14 +73,14 @@
           </v-flex>
         </v-layout>
 
-
-
       </v-container>
     </v-card-text>
   </v-card>
 </template>
 <script>
-  import XLSX from "xlsx";
+  import XLSX from "xlsx"
+  import XRegExp from 'xregexp'
+  XRegExp.install('astral')
   export default {
     name: "Settings",
     data: function () {
@@ -120,6 +120,39 @@
         });
         this.filedNames = this.sheet[0]
       },
+      checkDef: function (def) {
+        if (XRegExp("<").test(def)) {
+          return def
+        }
+        let rules = [{
+            tag: '<jion>',
+            regex: '(.*反)|(音.+)|(.+音)'
+          },
+          {
+            tag: '<wakun>',
+            regex: '\\p{Katakana}.*'
+          },
+          {
+            tag: '<jitai>',
+            regex: '.*[俗|正|或|古].*'
+          },
+          {
+            tag:'<kanbun>',
+            regex:'也$'
+          }
+        ]
+        for (let i =0;i<rules.length;i++) {
+          if (XRegExp(rules[i].regex).test(def)) {
+            let endTag = rules[i].tag.replace(/</, '</')
+              console.log(rules[i].tag + def + endTag)
+            
+            return rules[i].tag + def + endTag
+          }
+            
+        }
+        return def
+
+      },
       renderTable: function () {
         const indexID = this.filedNames.indexOf(this.selectedIDFiledName)
         this.$store.commit("updateIndexID", indexID)
@@ -137,9 +170,9 @@
           if (def != "") { //注文は空きじゃないだけを
             let parsedDef = []
             def = def.split(this.separator)
-            console.log(this.separator)
             for (let j = 0; j < def.length; j++) {
               let ele = def[j]
+              ele = this.checkDef(ele)
               let regex = /(<([^>]+)>)/gi
               let type = ele.match(regex)
               let text = ele.replace(regex, "")
@@ -172,8 +205,6 @@
         //データを保存
         this.$store.commit('updateSeparator', this.separator)
         this.$store.commit('updateWorkData', renderResult)
-
-        // console.log(this.$store.state.workData)
 
         //表示ページへの移動
         this.$router.push('/display')

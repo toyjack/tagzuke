@@ -14,7 +14,6 @@
       </v-card>
     </v-dialog>
     <v-flex xs8>
-      <!-- <record v-for="(item,index) in workData" :item="item" :key="index" @editDef="editDef(index)"></record> -->
       <v-layout row v-for="(item,index) in workData" :key="index">
         <v-flex xs2>{{workData[index].id}}</v-flex>
         <v-flex xs2>{{item.entry}}</v-flex>
@@ -40,12 +39,9 @@
 </template>
 
 <script>
-  import Record from '../components/Record.vue'
+  import XLSX from 'xlsx'
   export default {
     name: 'conform',
-    components:{
-      record: Record
-    },
     data: function () {
       return {
         editDialog: false,
@@ -71,7 +67,6 @@
         this.fixedDef = this.workData[index].def
       },
       save: function () {
-        //
         let result = []
         for (let i = 0; i < this.workData.length; i++) {
           let line = this.workData[i]
@@ -85,10 +80,10 @@
               if (newDef === "") {
                 newDef = startTag + text + endTag
               } else {
-                newDef = newDef + "　" + startTag + text + endTag
+                newDef = newDef + this.separator + startTag + text + endTag
               }
             }
-            line.def = newDef
+            // line.def = newDef
           }
           result.push({
             id: line.id,

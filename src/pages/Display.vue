@@ -115,8 +115,7 @@
 
     },
     watch: {
-      defActivedIndex: function (newIndex, oldIndex) {
-        // this.parseDef(this.workData[newIndex].def)
+      defActivedIndex: function (newIndex, oldIndex) {      
         this.tagActived.index = 0
         this.initTagSelection()
       },

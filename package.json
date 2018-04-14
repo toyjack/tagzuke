@@ -17,7 +17,8 @@
     "vue-shortkey": "^3.1.1",
     "vuetify": "~1",
     "vuex": "^3.0.1",
-    "xlsx": "^0.11.19"
+    "xlsx": "^0.11.19",
+    "xregexp": "^4.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.6",
