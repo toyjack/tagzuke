@@ -15,7 +15,8 @@ export default new Vuex.Store({
       indexDef: "",
       separator: "　"
     },
-    tags: ["<jion>",
+    tags: [
+      "<jion>",
       "<jitai>",
       "<kanbun>",
       "<wakun>"
@@ -25,7 +26,29 @@ export default new Vuex.Store({
       "<jitai>": "blue",
       "<kanbun>": "green",
       "<wakun>": "orange"
-    }
+    },
+    new_tags:[
+      {
+        name:'字音注',
+        tag:'<jion>',
+        color:'red'
+      },
+      {
+        name:'和訓注',
+        tag:'<wakun>',
+        color:'orange'
+      },
+      {
+        name:'字体注',
+        tag:'<jitai>',
+        color:'blue'
+      },
+      {
+        name:'意義注',
+        tag:'<kanbun>',
+        color:'green'
+      }
+    ],
   },
   getters: {
     workbookData: function (state) {
@@ -77,6 +100,12 @@ export default new Vuex.Store({
           break
         }
       }
+    },
+    updateDefTag(state,payload){
+      let defIndex=payload.defIndex
+      let tagIndex=payload.tagIndex
+      let newTag=payload.newTag
+      state.workData[defIndex].def[tagIndex].type=newTag
     },
     updateTags(state, data) {
       state.tags = data

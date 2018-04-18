@@ -21,6 +21,9 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+      <v-list dense class="pt-0">
+
+      </v-list>
     </v-navigation-drawer>
 
     <v-toolbar fixed app>
@@ -29,51 +32,69 @@
     </v-toolbar>
 
     <v-content>
-        <router-view>
-        </router-view>
+      <router-view>
+      </router-view>
     </v-content>
 
-    <v-footer app></v-footer>
- </v-app>
+    <v-footer app>
+      <v-layout row>
+        <v-flex xs12>
+          <v-card>
+            <v-card-text>
+              <p class="text-xs-center">Copyright&copy;2018
+                <a href="mailto:toyjack@gmail.com">Liu Guanwei</a>
+              </p>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-export default {
-  name: "App",
-  data() {
-    return {
-      showNavBar: null,
-      navMenus: [
-        {
-          title: "ファイルを開く",
-          icon: "dashboard",
-          path: "/"
-        },
-        {
-          title: "設定",
-          icon: "settings",
-          path: "/settings"
-        },
-        {
-          title: '表示',
-          icon:'picture_in_picture',
-          path: '/display'
-        },
-        {
-          title: "アバウト",
-          icon: "info",
-          path: "/about"
-        }
-      ]
-      
-    };
-  },
-  methods: {
-    
-  }
-};
+  export default {
+    name: "App",
+    data() {
+      return {
+        showNavBar: null,
+        navMenus: [{
+            title: "ファイルを開く",
+            icon: "dashboard",
+            path: "/"
+          },
+          {
+            title: "設定",
+            icon: "settings",
+            path: "/settings"
+          },
+          {
+            title: '表示',
+            icon: 'picture_in_picture',
+            path: '/display'
+          },
+          {
+            title: '確認＆保存',
+            icon: 'save',
+            path: '/conform'
+          },
+          {
+            title: "アバウト",
+            icon: "info",
+            path: "/about"
+          }
+        ]
+
+      };
+    },
+    methods: {
+
+    }
+  };
+
 </script>
 
 <style>
+
 
 </style>

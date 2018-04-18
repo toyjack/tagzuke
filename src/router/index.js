@@ -6,6 +6,7 @@ import Settings from '@/pages/Settings'
 import About from '@/pages/About'
 import Display from '@/pages/Display'
 import Conform from '@/pages/Conform'
+import Test from '@/pages/Test'
 
 Vue.use(Router)
 
@@ -37,5 +38,10 @@ export default new Router({
       name:'確認',
       component: Conform
     },
+    {
+      path:'/test',
+      name:'',
+      component:Test
+    }
   ]
 })
