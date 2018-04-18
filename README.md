@@ -1,4 +1,4 @@
-# Tag Zuke!
+# tagzuke
 日本古辞書の注文をマークアップするツール
 # 紹介
 
@@ -15,7 +15,7 @@
 git clone https://github.com/toyjack/tagzuke.git
 cd tagzuke
 npm install
-npm run start
+npm run dev
 ```
 
 # リンク
