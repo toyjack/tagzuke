@@ -8,7 +8,9 @@
 
 ## 利用方法
 
-[https://toyjack.github.io/tagzuke/](https://toyjack.github.io/tagzuke/)へアクセスください。
+[臨時サーバー: http://35.185.29.101/](http://35.185.29.101/)
+
+~~[https://toyjack.github.io/tagzuke/](https://toyjack.github.io/tagzuke/)へアクセスください。~~
 
 ## 参加
 
@@ -21,9 +23,11 @@ npm run dev
 
 ## リンク
 
-HDIC紹介：[http://hdic.jp](http://hdic.jp)
+HDICプロジェクト：[http://hdic.jp](http://hdic.jp)
 
 HDIC公開テキストデータベース：[https://github.com/shikeda/HDIC.git](https://github.com/shikeda/HDIC.git)
+
+HDIC Viewer: [https://hdic2.let.hokudai.ac.jp/](https://hdic2.let.hokudai.ac.jp/)
 
 ## ライセンス
 

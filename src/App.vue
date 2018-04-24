@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer fixed app v-model="showNavBar">
-      <v-toolbar flat>
+      <v-toolbar flat dark class="light-green darken-3">
         <v-list>
           <v-list-tile>
             <v-list-tile-title class="title">
@@ -26,9 +26,13 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar fixed app>
+    <v-toolbar fixed dark app class="light-green darken-1">
       <v-toolbar-side-icon @click.stop="showNavBar=!showNavBar"></v-toolbar-side-icon>
       <v-toolbar-title>{{$route.name}}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon href="https://github.com/toyjack/tagzuke" target="_blank">
+        <v-icon large>fa-github</v-icon>
+      </v-btn>
     </v-toolbar>
 
     <v-content>
