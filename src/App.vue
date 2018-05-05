@@ -26,7 +26,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar fixed dark app class="light-green darken-1">
+    <v-toolbar fixed dark app class="light-green darken-3">
       <v-toolbar-side-icon @click.stop="showNavBar=!showNavBar"></v-toolbar-side-icon>
       <v-toolbar-title>{{$route.name}}</v-toolbar-title>
       <v-spacer></v-spacer>
