@@ -1,8 +1,8 @@
 <template>
   <v-layout row>
     <v-flex xs12>
-      <p class="headline">About</p>
-      <p>データセット：<a href="http://hdic.jp">HDIC</a>の観智院本『類聚名義抄』（KRM）
+      <p class="headline">關於</p>
+      <p>資料庫：<a href="http://hdic.jp">HDIC</a>の観智院本『類聚名義抄』（KRM）
       </p>
       <p>
         開発：<a href="mailto:toyjack@gmail.com">劉冠偉(LIU Guanwei)</a>

@@ -16,36 +16,29 @@ export default new Vuex.Store({
       separator: "　"
     },
     tags: [
-      "<jion>",
-      "<jitai>",
-      "<kanbun>",
-      "<wakun>"
+      "<ziyin>",
+      "<ziti>",
+      "<shiyi>",
     ],
     tagStyle: {
-      "<jion>": "red",
-      "<jitai>": "blue",
-      "<kanbun>": "green",
-      "<wakun>": "orange"
+      "<ziyin>": "red",
+      "<ziti>": "blue",
+      "<shiyi>": "green",
     },
     new_tags:[
       {
         name:'字音注',
-        tag:'<jion>',
+        tag:'<ziyin>',
         color:'red'
       },
       {
-        name:'和訓注',
-        tag:'<wakun>',
-        color:'orange'
-      },
-      {
         name:'字体注',
-        tag:'<jitai>',
+        tag:'<ziti>',
         color:'blue'
       },
       {
         name:'意義注',
-        tag:'<kanbun>',
+        tag:'<shiyi>',
         color:'green'
       }
     ],

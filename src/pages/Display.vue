@@ -2,13 +2,13 @@
   <div>
     <v-dialog v-model="showDialog" persistent max-width="290">
       <v-card>
-        <v-card-title class="headline">注文修正</v-card-title>
+        <v-card-title class="headline">修改釋文</v-card-title>
         <v-card-text>
           <v-text-field name="fixedDef" label="注文を入力してください" multi-line v-model="fixedDef"></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat @click.native="showDialog = false">キャンセル</v-btn>
+          <v-btn color="green darken-1" flat @click.native="showDialog = false">取消</v-btn>
           <v-btn color="green darken-1" flat @click.native="saveChange">保存</v-btn>
         </v-card-actions>
       </v-card>
@@ -26,7 +26,7 @@
             {{item.def}}
           </v-flex>
           <v-flex xs1>
-            <v-btn @click.stop="editDef(index, item.id)">修正</v-btn>
+            <v-btn @click.stop="editDef(index, item.id)">修改</v-btn>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -115,7 +115,7 @@
 
     },
     watch: {
-      defActivedIndex: function (newIndex, oldIndex) {      
+      defActivedIndex: function (newIndex, oldIndex) {
         this.tagActived.index = 0
         this.initTagSelection()
       },

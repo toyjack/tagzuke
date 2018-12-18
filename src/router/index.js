@@ -14,7 +14,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'ファイルを開く',
+      name: '打開檔案',
       component: Home
     },
     {
@@ -24,12 +24,12 @@ export default new Router({
     },
     {
       path:'/about',
-      name:'アバウト',
+      name:'關於',
       component: About
     },
     {
       path:'/display',
-      name:'表示',
+      name:'顯示',
       component: Display
     },
     {

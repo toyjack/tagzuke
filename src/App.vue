@@ -5,7 +5,7 @@
         <v-list>
           <v-list-tile>
             <v-list-tile-title class="title">
-              メニュー
+              菜單
             </v-list-tile-title>
           </v-list-tile>
         </v-list>
@@ -63,7 +63,7 @@
       return {
         showNavBar: null,
         navMenus: [{
-            title: "ファイルを開く",
+            title: "打開檔案",
             icon: "dashboard",
             path: "/"
           },
@@ -73,7 +73,7 @@
             path: "/settings"
           },
           {
-            title: '表示',
+            title: '顯示',
             icon: 'picture_in_picture',
             path: '/display'
           },
@@ -83,7 +83,7 @@
             path: '/conform'
           },
           {
-            title: "アバウト",
+            title: "關於",
             icon: "info",
             path: "/about"
           }
