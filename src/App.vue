@@ -78,9 +78,14 @@
             path: '/display'
           },
           {
-            title: '確認＆保存',
-            icon: 'save',
+            title: '確認',
+            icon: 'chrome_reader_mode',
             path: '/conform'
+          },
+          {
+            title: '輸出',
+            icon: 'get_app',
+            path: '/export'
           },
           {
             title: "關於",

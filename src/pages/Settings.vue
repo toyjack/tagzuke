@@ -184,7 +184,7 @@
                   text: text
                 })
               } else {
-                console.log(text.charCodeAt(0))
+                // console.log(text.charCodeAt(0))
                 parsedDef.push({
                   type: "",
                   text: text
