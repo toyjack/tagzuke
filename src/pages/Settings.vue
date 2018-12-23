@@ -126,9 +126,10 @@
         let rules = [
           // 在下面添加規則，例如：
           // {
-          //   tag: '<ziyin>',
-          //   regex: '(亦音.+)|(音.+)|(.+音)|(.+切)'
+          //   tag: '<標籤>',
+          //   regex: '正則表達式'
           // },
+          //將按規則順序判斷
           {
             tag: '<ziyin>',
             regex: '([亦又]音.+)|(音.+)|(.+音)|(.+切)'
@@ -144,9 +145,7 @@
         ]
         for (let i =0;i<rules.length;i++) {
           if (XRegExp(rules[i].regex).test(def)) {
-            let endTag = rules[i].tag.replace(/</, '</')
-              // console.log(rules[i].tag + def + endTag)
-
+            let endTag = rules[i].tag.replace(/</, '</') //添加結束標籤
             return rules[i].tag + def + endTag
           }
 
@@ -175,6 +174,9 @@
             for (let j = 0; j < def.length; j++) {
               let ele = def[j]
               ele = this.checkDef(ele)
+
+              //生成json，
+              // TODO:與checkDef合併才對
               let regex = /(<([^>]+)>)/gi
               let type = ele.match(regex)
               let text = ele.replace(regex, "")
@@ -191,12 +193,12 @@
                 })
               }
             }
-
+            // 推送到渲染結果中
             renderResult.push({
               id: id,
               entry: entry,
               def: parsedDef
-            }); // TODO: 前処理と注文の構造化
+            });
           }
         }
 
